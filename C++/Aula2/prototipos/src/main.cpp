@@ -6,7 +6,7 @@ using namespace std;
 int main()
 {
     int a,b,s;
-    a = 10;
+    a = 30;
     b = 20;
     s = soma(a,b);
     cout<<"Resultado da soma: "<<s<<endl;
