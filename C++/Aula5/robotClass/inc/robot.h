@@ -1,5 +1,5 @@
-#ifndef CONTA_H
-#define CONTA_H
+#ifndef ROBOT_H
+#define ROBOT_H
 
 #include <string>
 
@@ -8,7 +8,7 @@ class Robot {
 
 	public:	//Podem ser acessados direto no main
 		int id;
-		float pos[2]; 
+		float pos[2] = {0,0}; 
 		float speed[2]; 
 		void showPos();
 		void move(float time);

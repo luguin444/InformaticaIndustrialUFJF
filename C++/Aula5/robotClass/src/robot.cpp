@@ -4,8 +4,7 @@ using namespace std;
 
 void Robot::showPos()
 {
-	cout << "Position X: " << this->pos[0] << endl;
-	cout << "Position Y: " << this->pos[1] << endl;
+	cout << "Position [X,Y]: " << "[" << this->pos[0] << "," << this->pos[1] << "]" << endl;
 }
 
 void Robot::move(float time)
