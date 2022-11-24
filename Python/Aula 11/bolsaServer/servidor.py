@@ -1,4 +1,5 @@
 import socket
+from yahooquery import Ticker
 
 
 class Servidor():
@@ -23,36 +24,28 @@ class Servidor():
             print("Erro ao inicializar o servidor", e.args)
 
     def _service(self, con, client):
-        """
-        Método que implementa o serviço de calculadora
-        :param con: objeto socket utilizado para enviar e receber dados
-        :param client: é o endereço do cliente
-        """
         print("Atendendo cliente ", client)
-        # operadores = ['+', '-', '*', '/']
         while True:
             try:
-                # pega só os primeiros 1024 bytes. Ex: "10+ 3x10"
                 msg = con.recv(1024)
-                msg_s = str(msg.decode('ascii'))  # convertend bytes em string
-                # decodifica uma expressão algebrica e resolve
-                resp = eval(msg_s)
-                # op = "none"
-                # for x in operadores:
-                #     if msg_s.find(x) > 0:
-                #         op = x
-                #         msg_s = msg_s.split(op)
-                #         break
-                # if op == '+':
-                #     resp = float(msg_s[0]) + float(msg_s[1])
-                # elif op == '-':
-                #     resp = float(msg_s[0]) - float(msg_s[1])
-                # elif op == '*':
-                #     resp = float(msg_s[0]) * float(msg_s[1])
-                # elif op == '/':
-                #     resp = float(msg_s[0]) / float(msg_s[1])
-                # else:
-                #     resp = "Operação inválida"
+                msg_s = str(msg.decode('ascii'))
+                operation, action = msg_s.split(',')
+
+                ticker_info = Ticker(action).summary_detail[action]
+
+                print(ticker_info)
+
+                if operation == 'd':  # dividend_rate
+                    resp = ticker_info['dividendRate']
+                elif operation == 'b':  # beta
+                    resp = ticker_info['beta']
+                elif operation == 'm':  # market Capitalization
+                    resp = ticker_info['marketCap']
+                elif operation == 'o':  # open price
+                    resp = str(ticker_info['open']) + \
+                        " " + ticker_info['currency']
+                else:
+                    resp = "Operação inválida"
 
                 # transformamos em bytes dnv e enviando para o cliente
                 con.send(bytes(str(resp), 'ascii'))

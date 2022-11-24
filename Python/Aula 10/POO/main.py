@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from contas import Conta, ContaPoupanca
 
 #Utilização da classe Conta
