@@ -2,6 +2,7 @@ from pyModbusTCP.client import ModbusClient
 from pyModbusTCP.utils import encode_ieee, long_list_to_word, word_list_to_long, decode_ieee
 from pymodbus.payload import BinaryPayloadBuilder, BinaryPayloadDecoder
 from time import sleep
+from pymodbus.payload import Endian
 
 
 class ClienteMODBUS():
@@ -96,11 +97,12 @@ class ClienteMODBUS():
         return self._cliente.write_multiple_registers(addr, long_list_to_word([valor_tratado]))
 
     def lerFloat(self, addr):
-        # vai retornar um lista com 1 posição [x]
-        list_valores = self._cliente.read_holding_registers(addr, 2)
+        num_float = self._cliente.read_holding_registers(addr, 2)
 
-        valor_tratado = decode_ieee(word_list_to_long(list_valores)[0])
-        return valor_tratado
+        decorder = BinaryPayloadDecoder.fromRegisters(
+            num_float, Endian.Big, Endian.Little)
+        decoded_float = decorder.decode_32bit_float()
+        return decoded_float
 
     def escreveString(self, addr, valor):
         builder = BinaryPayloadBuilder()
